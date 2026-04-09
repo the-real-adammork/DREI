@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { View, Text, TextInput, FlatList, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Search, SlidersHorizontal } from 'lucide-react-native';
 import { properties } from '@drei/shared';
 import { PropertyCard } from '../../components/PropertyCard';
@@ -23,7 +24,8 @@ export default function Browse() {
   };
 
   return (
-    <View className="flex-1 bg-gray-900">
+    <SafeAreaView edges={['top']} style={{ flex: 1, backgroundColor: '#0f172a' }}>
+      <Text className="px-4 pb-3 pt-2 text-2xl font-bold text-white">Browse</Text>
       <View className="flex-row items-center gap-3 px-4 pb-3 pt-2">
         <View className="flex-1 flex-row items-center gap-2 rounded-xl bg-gray-800 px-3 py-3">
           <Search size={18} color="#9ca3af" />
@@ -72,6 +74,6 @@ export default function Browse() {
       />
 
       <FilterSheet ref={sheetRef} value={filters} locations={locations} onApply={handleApply} />
-    </View>
+    </SafeAreaView>
   );
 }
