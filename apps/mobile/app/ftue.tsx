@@ -19,7 +19,7 @@ const { width } = Dimensions.get('window');
 
 type Panel = {
   key: string;
-  title: string;
+  title: React.ReactNode;
   body: string;
   render: () => React.ReactNode;
 };
@@ -27,14 +27,19 @@ type Panel = {
 const panels: Panel[] = [
   {
     key: 'own',
-    title: 'Own real estate, on-chain.',
-    body: 'Invest in curated, tokenized properties from your phone.',
+    title: (
+      <>
+        Invest in Real Estate with{' '}
+        <Text className="text-indigo-400">Blockchain</Text> Technology
+      </>
+    ),
+    body: 'Own fractions of premium properties with full transparency, liquidity, and security provided by blockchain technology.',
     render: () => (
       <ImageBackground
         source={{
           uri: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1200&q=80',
         }}
-        className="h-72 w-full overflow-hidden rounded-3xl"
+        className="h-60 w-full overflow-hidden rounded-3xl"
         imageStyle={{ borderRadius: 24 }}
       />
     ),
@@ -89,7 +94,7 @@ export default function Ftue() {
   const handleConnected = () => {
     connectWallet();
     sheetRef.current?.dismiss();
-    router.replace('/(main)/browse');
+    router.replace('/(main)/dashboard' as any);
   };
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -114,10 +119,10 @@ export default function Ftue() {
         onScroll={onScroll}
         scrollEventThrottle={16}
         renderItem={({ item }) => (
-          <View style={{ width }} className="flex-1 px-6 pt-6">
-            <View className="mb-8">{item.render()}</View>
-            <Text className="mb-3 text-3xl font-bold text-white">{item.title}</Text>
-            <Text className="text-base leading-6 text-gray-400">{item.body}</Text>
+          <View style={{ width }} className="flex-1 items-center justify-center px-6">
+            <View className="mb-8 w-full">{item.render()}</View>
+            <Text className="mb-3 text-center text-3xl font-bold text-white">{item.title}</Text>
+            <Text className="text-center text-base leading-6 text-gray-400">{item.body}</Text>
           </View>
         )}
       />

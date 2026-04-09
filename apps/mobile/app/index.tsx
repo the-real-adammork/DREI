@@ -11,5 +11,5 @@ export default function Index() {
       </View>
     );
   }
-  return <Redirect href={isConnected ? '/(main)/browse' : '/ftue'} />;
+  return <Redirect href={isConnected ? '/(main)/dashboard' : '/ftue'} />;
 }

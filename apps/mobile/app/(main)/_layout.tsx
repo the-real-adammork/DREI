@@ -1,24 +1,32 @@
-import { Stack } from 'expo-router';
-import { View } from 'react-native';
-import { WalletChip } from '../../components/WalletChip';
+import { Tabs } from 'expo-router';
+import { LayoutDashboard, Compass } from 'lucide-react-native';
 
 export default function MainLayout() {
   return (
-    <Stack
+    <Tabs
       screenOptions={{
-        headerStyle: { backgroundColor: '#0f172a' },
-        headerTintColor: '#fff',
-        headerTitleStyle: { color: '#fff' },
-        contentStyle: { backgroundColor: '#0f172a' },
-        headerRight: () => (
-          <View style={{ marginRight: 12 }}>
-            <WalletChip />
-          </View>
-        ),
+        headerShown: false,
+        tabBarStyle: { backgroundColor: '#0f172a', borderTopColor: '#1f2937' },
+        tabBarActiveTintColor: '#6366f1',
+        tabBarInactiveTintColor: '#6b7280',
+        sceneStyle: { backgroundColor: '#0f172a' },
       }}
     >
-      <Stack.Screen name="browse" options={{ title: 'Browse' }} />
-      <Stack.Screen name="property/[id]" options={{ title: 'Property' }} />
-    </Stack>
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: 'Dashboard',
+          tabBarIcon: ({ color, size }) => <LayoutDashboard color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="browse"
+        options={{
+          title: 'Browse',
+          tabBarIcon: ({ color, size }) => <Compass color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen name="property/[id]" options={{ href: null }} />
+    </Tabs>
   );
 }
