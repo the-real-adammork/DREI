@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState, useEffect } from 'react';
-import { View, Text, Pressable, TextInput, ScrollView } from 'react-native';
+import { View, Text, Pressable, TextInput } from 'react-native';
 import { Filters, defaultFilters } from '../lib/filters';
 import { AnimatedSheet } from './AnimatedSheet';
 
@@ -32,7 +32,7 @@ export const FilterSheet = forwardRef<FilterSheetHandle, Props>(
 
     return (
       <AnimatedSheet visible={visible} onClose={() => setVisible(false)}>
-        <View className="rounded-t-3xl bg-gray-800 px-6 pb-10 pt-4" style={{ maxHeight: '85%' }}>
+        <View className="rounded-t-3xl bg-gray-800 px-6 pb-10 pt-4">
           <View className="mb-4 self-center h-1 w-10 rounded-full bg-gray-600" />
           <View className="mb-4 flex-row items-center justify-between">
             <Text className="text-xl font-semibold text-white">Filters</Text>
@@ -41,7 +41,7 @@ export const FilterSheet = forwardRef<FilterSheetHandle, Props>(
             </Pressable>
           </View>
 
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <View>
             <Text className="mb-2 text-sm text-gray-400">Status</Text>
             <View className="mb-5 flex-row flex-wrap gap-2">
               {statuses.map((s) => (
@@ -99,7 +99,7 @@ export const FilterSheet = forwardRef<FilterSheetHandle, Props>(
                 </Pressable>
               ))}
             </View>
-          </ScrollView>
+          </View>
 
           <Pressable
             className="mt-2 items-center rounded-xl bg-indigo-500 py-4 active:bg-indigo-600"
