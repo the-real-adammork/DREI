@@ -22,6 +22,7 @@ type Panel = {
   title: React.ReactNode;
   body: string;
   render: () => React.ReactNode;
+  textFirst?: boolean;
 };
 
 const panels: Panel[] = [
@@ -48,6 +49,7 @@ const panels: Panel[] = [
     key: 'how',
     title: 'How it works',
     body: 'Browse, connect, invest, and track returns — all in one app.',
+    textFirst: true,
     render: () => (
       <View className="gap-5">
         {[
@@ -120,9 +122,21 @@ export default function Ftue() {
         scrollEventThrottle={16}
         renderItem={({ item }) => (
           <View style={{ width }} className="flex-1 items-center justify-center px-6">
-            <View className="mb-8 w-full">{item.render()}</View>
-            <Text className="mb-3 text-center text-3xl font-bold text-white">{item.title}</Text>
-            <Text className="text-center text-base leading-6 text-gray-400">{item.body}</Text>
+            {item.textFirst ? (
+              <>
+                <Text className="mb-3 text-center text-3xl font-bold text-white">{item.title}</Text>
+                <Text className="mb-8 text-center text-base leading-6 text-gray-400">
+                  {item.body}
+                </Text>
+                <View className="w-full">{item.render()}</View>
+              </>
+            ) : (
+              <>
+                <View className="mb-8 w-full">{item.render()}</View>
+                <Text className="mb-3 text-center text-3xl font-bold text-white">{item.title}</Text>
+                <Text className="text-center text-base leading-6 text-gray-400">{item.body}</Text>
+              </>
+            )}
           </View>
         )}
       />
