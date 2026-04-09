@@ -67,7 +67,11 @@ export default function Portfolio() {
           {userPortfolio.properties.map((p) => (
             <Pressable
               key={p.propertyId}
-              onPress={() => router.push(('/(main)/property/' + p.propertyId) as any)}
+              onPress={() =>
+                router.push(
+                  ('/(main)/property/' + p.propertyId + '?from=portfolio') as any
+                )
+              }
               className="flex-row items-center justify-between rounded-xl border border-gray-700 bg-gray-800 p-4 active:bg-gray-700"
             >
               <View className="flex-1 pr-3">
