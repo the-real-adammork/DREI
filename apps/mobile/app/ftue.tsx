@@ -96,7 +96,7 @@ export default function Ftue() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-900" edges={['top', 'bottom']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#0f172a' }} className="flex-1 bg-gray-900" edges={['top', 'bottom']}>
       <View className="flex-row justify-end px-6 pt-2">
         <Pressable onPress={openSheet} hitSlop={16}>
           <Text className="text-base text-gray-400">Skip</Text>
