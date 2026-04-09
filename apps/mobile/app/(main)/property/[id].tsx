@@ -10,8 +10,10 @@ import {
   ChevronRight,
   Copy,
   Check,
+  ChevronLeft,
+  Briefcase,
 } from 'lucide-react-native';
-import { properties } from '@drei/shared';
+import { properties, userPortfolio } from '@drei/shared';
 import { useWallet } from '../../../lib/wallet';
 import { TransactionSheet, TransactionSheetHandle } from '../../../components/TransactionSheet';
 
@@ -34,6 +36,8 @@ export default function PropertyDetail() {
   }
 
   const pct = Math.round((property.tokensSold / property.totalTokens) * 100);
+  const holding = userPortfolio.properties.find((p) => p.propertyId === property.id);
+  const owned = !!holding;
 
   const copyAddress = async () => {
     await Clipboard.setStringAsync(String(property.contractAddress));
@@ -45,9 +49,19 @@ export default function PropertyDetail() {
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <View>
           <Image source={{ uri: property.imageUrl }} className="h-72 w-full" resizeMode="cover" />
-          <View className="absolute right-4 top-4 rounded-full bg-emerald-500/30 px-3 py-1">
-            <Text className="text-xs font-medium text-emerald-300">{property.status}</Text>
-          </View>
+          <SafeAreaView edges={['top']} className="absolute inset-x-0 top-0">
+            <View className="flex-row items-center justify-between px-4 pt-2">
+              <Pressable
+                onPress={() => router.back()}
+                className="h-10 w-10 items-center justify-center rounded-full bg-black/50 active:bg-black/70"
+              >
+                <ChevronLeft size={22} color="#fff" />
+              </Pressable>
+              <View className="rounded-full bg-emerald-500/30 px-3 py-1">
+                <Text className="text-xs font-medium text-emerald-300">{property.status}</Text>
+              </View>
+            </View>
+          </SafeAreaView>
         </View>
 
         <View className="px-5 pt-5">
@@ -73,6 +87,35 @@ export default function PropertyDetail() {
               <Text className="text-lg font-bold text-white">{property.tokenPrice} ETH</Text>
             </View>
           </View>
+
+          {owned && holding && (
+            <View className="mb-5 rounded-xl border border-indigo-500/40 bg-indigo-500/10 p-4">
+              <View className="mb-3 flex-row items-center gap-2">
+                <Briefcase size={14} color="#818cf8" />
+                <Text className="text-xs font-semibold uppercase tracking-wide text-indigo-300">
+                  You own this
+                </Text>
+              </View>
+              <View className="flex-row justify-between">
+                <View>
+                  <Text className="text-xs text-gray-400">Tokens owned</Text>
+                  <Text className="mt-1 text-lg font-bold text-white">{holding.tokensOwned}</Text>
+                </View>
+                <View>
+                  <Text className="text-xs text-gray-400">Invested</Text>
+                  <Text className="mt-1 text-lg font-bold text-indigo-300">
+                    {holding.investmentValue.toFixed(2)} ETH
+                  </Text>
+                </View>
+                <View>
+                  <Text className="text-xs text-gray-400">Est. yearly yield</Text>
+                  <Text className="mt-1 text-lg font-bold text-emerald-400">
+                    {((holding.investmentValue * (property.returnRate ?? 0)) / 100).toFixed(3)} ETH
+                  </Text>
+                </View>
+              </View>
+            </View>
+          )}
 
           <View className="mb-6 rounded-xl bg-gray-800 p-4">
             <View className="mb-2 flex-row justify-between">
@@ -139,7 +182,9 @@ export default function PropertyDetail() {
               isConnected ? 'bg-indigo-500 active:bg-indigo-600' : 'bg-gray-700'
             }`}
           >
-            <Text className="text-base font-semibold text-white">Buy Tokens</Text>
+            <Text className="text-base font-semibold text-white">
+              {owned ? 'Buy More Tokens' : 'Buy Tokens'}
+            </Text>
           </Pressable>
         </View>
       </SafeAreaView>
