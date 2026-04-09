@@ -1,24 +1,37 @@
-import React, { forwardRef, useMemo, useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
-import { BottomSheetModal, BottomSheetBackdrop, BottomSheetView } from '@gorhom/bottom-sheet';
 import { Check, Minus, Plus } from 'lucide-react-native';
 import type { Property } from '@drei/shared';
+import { AnimatedSheet } from './AnimatedSheet';
+
+export type TransactionSheetHandle = {
+  present: () => void;
+  dismiss: () => void;
+};
 
 type Props = { property: Property };
 type Stage = 'review' | 'confirm' | 'success';
 
-export const TransactionSheet = forwardRef<BottomSheetModal, Props>(({ property }, ref) => {
-  const snapPoints = useMemo(() => ['70%'], []);
+export const TransactionSheet = forwardRef<TransactionSheetHandle, Props>(({ property }, ref) => {
+  const [visible, setVisible] = useState(false);
   const [count, setCount] = useState(1);
   const [stage, setStage] = useState<Stage>('review');
 
+  const close = () => {
+    setVisible(false);
+    setTimeout(() => {
+      setCount(1);
+      setStage('review');
+    }, 300);
+  };
+
+  useImperativeHandle(ref, () => ({
+    present: () => setVisible(true),
+    dismiss: close,
+  }));
+
   const totalEth = (count * property.tokenPrice).toFixed(2);
   const totalUsd = count * property.tokenPrice * 3000;
-
-  const reset = () => {
-    setCount(1);
-    setStage('review');
-  };
 
   const next = () => {
     if (stage === 'review') setStage('confirm');
@@ -26,26 +39,24 @@ export const TransactionSheet = forwardRef<BottomSheetModal, Props>(({ property 
   };
 
   return (
-    <BottomSheetModal
-      ref={ref}
-      snapPoints={snapPoints}
-      onDismiss={reset}
-      backgroundStyle={{ backgroundColor: '#1f2937' }}
-      handleIndicatorStyle={{ backgroundColor: '#4b5563' }}
-      backdropComponent={(props) => (
-        <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} opacity={0.7} />
-      )}
-    >
-      <BottomSheetView className="flex-1 px-6 pt-2">
+    <AnimatedSheet visible={visible} onClose={close}>
+      <View className="rounded-t-3xl bg-gray-800 px-6 pb-10 pt-4">
+        <View className="mb-4 self-center h-1 w-10 rounded-full bg-gray-600" />
         {stage === 'success' ? (
-          <View className="flex-1 items-center justify-center">
+          <View className="items-center py-10">
             <View className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-emerald-500/20">
               <Check size={44} color="#10b981" />
             </View>
             <Text className="mb-2 text-2xl font-bold text-white">Purchase complete</Text>
-            <Text className="text-center text-gray-400">
+            <Text className="mb-6 text-center text-gray-400">
               {count} token{count !== 1 ? 's' : ''} of {property.title}
             </Text>
+            <Pressable
+              className="w-full items-center rounded-xl bg-indigo-500 py-4 active:bg-indigo-600"
+              onPress={close}
+            >
+              <Text className="text-base font-semibold text-white">Done</Text>
+            </Pressable>
           </View>
         ) : (
           <>
@@ -80,9 +91,7 @@ export const TransactionSheet = forwardRef<BottomSheetModal, Props>(({ property 
               </View>
               <View className="flex-row justify-between">
                 <Text className="text-gray-400">Total (USD)</Text>
-                <Text className="font-semibold text-white">
-                  ${totalUsd.toLocaleString()}
-                </Text>
+                <Text className="font-semibold text-white">${totalUsd.toLocaleString()}</Text>
               </View>
             </View>
 
@@ -96,8 +105,8 @@ export const TransactionSheet = forwardRef<BottomSheetModal, Props>(({ property 
             </Pressable>
           </>
         )}
-      </BottomSheetView>
-    </BottomSheetModal>
+      </View>
+    </AnimatedSheet>
   );
 });
 

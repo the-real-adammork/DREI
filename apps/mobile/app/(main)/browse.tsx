@@ -1,16 +1,15 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { View, Text, TextInput, FlatList, Pressable } from 'react-native';
 import { Search, SlidersHorizontal } from 'lucide-react-native';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { properties } from '@drei/shared';
 import { PropertyCard } from '../../components/PropertyCard';
-import { FilterSheet } from '../../components/FilterSheet';
+import { FilterSheet, FilterSheetHandle } from '../../components/FilterSheet';
 import { applyFilters, defaultFilters, isActive, uniqueLocations, Filters } from '../../lib/filters';
 
 export default function Browse() {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<Filters>(defaultFilters);
-  const sheetRef = useRef<BottomSheetModal>(null);
+  const sheetRef = useRef<FilterSheetHandle>(null);
   const listRef = useRef<FlatList>(null);
 
   const locations = useMemo(() => uniqueLocations(properties), []);

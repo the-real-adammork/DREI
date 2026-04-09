@@ -11,16 +11,15 @@ import {
   Copy,
   Check,
 } from 'lucide-react-native';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { properties } from '@drei/shared';
 import { useWallet } from '../../../lib/wallet';
-import { TransactionSheet } from '../../../components/TransactionSheet';
+import { TransactionSheet, TransactionSheetHandle } from '../../../components/TransactionSheet';
 
 export default function PropertyDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { isConnected } = useWallet();
-  const txRef = useRef<BottomSheetModal>(null);
+  const txRef = useRef<TransactionSheetHandle>(null);
   const property = properties.find((p) => p.id === id);
 
   if (!property) {
