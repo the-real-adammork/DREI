@@ -18,12 +18,11 @@ import { useWallet } from '../../../lib/wallet';
 import { TransactionSheet, TransactionSheetHandle } from '../../../components/TransactionSheet';
 
 export default function PropertyDetail() {
-  const { id, from } = useLocalSearchParams<{ id: string; from?: string }>();
+  const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { isConnected } = useWallet();
   const txRef = useRef<TransactionSheetHandle>(null);
   const property = properties.find((p) => p.id === id);
-  const stickyCta = from !== 'portfolio';
 
   if (!property) {
     return (
@@ -47,7 +46,7 @@ export default function PropertyDetail() {
 
   return (
     <View className="flex-1 bg-gray-900">
-      <ScrollView contentContainerStyle={{ paddingBottom: stickyCta ? 120 : 32 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <View>
           <Image source={{ uri: property.imageUrl }} className="h-72 w-full" resizeMode="cover" />
           <SafeAreaView edges={['top']} className="absolute inset-x-0 top-0">
@@ -172,39 +171,24 @@ export default function PropertyDetail() {
             <Copy size={16} color="#6366f1" />
           </Pressable>
 
-          {!stickyCta && (
-            <Pressable
-              disabled={!isConnected}
-              onPress={() => txRef.current?.present()}
-              className={`items-center rounded-xl py-4 ${
-                isConnected ? 'bg-indigo-500 active:bg-indigo-600' : 'bg-gray-700'
-              }`}
-            >
-              <Text className="text-base font-semibold text-white">
-                {owned ? 'Buy More Tokens' : 'Buy Tokens'}
-              </Text>
-            </Pressable>
-          )}
         </View>
       </ScrollView>
 
-      {stickyCta && (
-        <SafeAreaView edges={['bottom']} className="absolute inset-x-0 bottom-0 bg-gray-900/95">
-          <View className="px-5 pt-3">
-            <Pressable
-              disabled={!isConnected}
-              onPress={() => txRef.current?.present()}
-              className={`items-center rounded-xl py-4 ${
-                isConnected ? 'bg-indigo-500 active:bg-indigo-600' : 'bg-gray-700'
-              }`}
-            >
-              <Text className="text-base font-semibold text-white">
-                {owned ? 'Buy More Tokens' : 'Buy Tokens'}
-              </Text>
-            </Pressable>
-          </View>
-        </SafeAreaView>
-      )}
+      <SafeAreaView edges={['bottom']} className="absolute inset-x-0 bottom-0 bg-gray-900/95">
+        <View className="px-5 pt-3">
+          <Pressable
+            disabled={!isConnected}
+            onPress={() => txRef.current?.present()}
+            className={`items-center rounded-xl py-4 ${
+              isConnected ? 'bg-indigo-500 active:bg-indigo-600' : 'bg-gray-700'
+            }`}
+          >
+            <Text className="text-base font-semibold text-white">
+              {owned ? 'Buy More Tokens' : 'Buy Tokens'}
+            </Text>
+          </Pressable>
+        </View>
+      </SafeAreaView>
 
       <TransactionSheet ref={txRef} property={property} />
     </View>
