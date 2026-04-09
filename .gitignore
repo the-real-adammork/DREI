@@ -7,6 +7,9 @@
 node_modules/
 dist/
 
+# Superpowers brainstorm/planning scratch
+.superpowers/
+
 # Compiled Java class files
 *.class
 
