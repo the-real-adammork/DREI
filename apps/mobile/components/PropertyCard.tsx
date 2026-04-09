@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, Text, Image, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
-import { MapPin, TrendingUp } from 'lucide-react-native';
-import type { Property } from '@drei/shared';
+import { MapPin, TrendingUp, Briefcase } from 'lucide-react-native';
+import { userPortfolio, type Property } from '@drei/shared';
 
 export function PropertyCard({ property }: { property: Property }) {
   const router = useRouter();
   const pct = Math.round((property.tokensSold / property.totalTokens) * 100);
+  const owned = userPortfolio.properties.some((p) => p.propertyId === property.id);
 
   const bgClass =
     property.status === 'Available'
@@ -28,8 +29,16 @@ export function PropertyCard({ property }: { property: Property }) {
     >
       <View>
         <Image source={{ uri: property.imageUrl }} className="h-48 w-full" resizeMode="cover" />
-        <View className={`absolute right-3 top-3 rounded-full px-3 py-1 ${bgClass}`}>
-          <Text className={`text-xs font-medium ${textClass}`}>{property.status}</Text>
+        <View className="absolute right-3 top-3 flex-row gap-2">
+          {owned && (
+            <View className="flex-row items-center gap-1 rounded-full bg-indigo-500/90 px-2.5 py-1">
+              <Briefcase size={10} color="#fff" />
+              <Text className="text-xs font-semibold text-white">Owned</Text>
+            </View>
+          )}
+          <View className={`rounded-full px-3 py-1 ${bgClass}`}>
+            <Text className={`text-xs font-medium ${textClass}`}>{property.status}</Text>
+          </View>
         </View>
       </View>
 
