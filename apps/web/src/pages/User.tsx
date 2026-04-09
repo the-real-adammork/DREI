@@ -1,79 +1,81 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { PlusIcon, EditIcon, TrashIcon, ShieldIcon, BuildingIcon, CoinsIcon } from 'lucide-react';
+import { WalletIcon, CoinsIcon, HistoryIcon, BuildingIcon, SettingsIcon, LogOutIcon } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { useWallet } from '../context/WalletContext';
-import { properties } from '../utils/mockData';
+import { userPortfolio } from '@drei/shared';
 
-export default function Admin() {
-  const { isConnected, isAdmin } = useWallet();
+export default function User() {
+  const { isConnected, address, disconnectWallet } = useWallet();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('properties');
+  const [activeTab, setActiveTab] = useState('portfolio');
   
   const tabs = [
     {
-      id: 'properties',
-      label: 'Properties',
+      id: 'portfolio',
+      label: 'My Portfolio',
       icon: <BuildingIcon size={16} />
     },
     {
-      id: 'contracts',
-      label: 'Contracts',
-      icon: <CoinsIcon size={16} />
+      id: 'transactions',
+      label: 'Transactions',
+      icon: <HistoryIcon size={16} />
+    },
+    {
+      id: 'settings',
+      label: 'Settings',
+      icon: <SettingsIcon size={16} />
     }
   ];
 
-  // Mock contract deployments
-  const contractDeployments = [
+  // Mock transactions
+  const transactions = [
     {
       id: 1,
-      name: 'Luxury Downtown Apartment',
-      address: '0x1234...5678',
-      date: '2023-06-10',
-      status: 'Active'
+      type: 'purchase',
+      property: 'Luxury Downtown Apartment',
+      tokens: 2,
+      value: 1.0,
+      date: '2023-06-15'
     },
     {
       id: 2,
-      name: 'Beachfront Villa',
-      address: '0xabcd...efgh',
-      date: '2023-05-15',
-      status: 'Active'
+      type: 'purchase',
+      property: 'Beachfront Villa',
+      tokens: 1,
+      value: 1.2,
+      date: '2023-05-22'
     },
     {
       id: 3,
-      name: 'Modern Office Building',
-      address: '0x7890...1234',
-      date: '2023-04-22',
-      status: 'Active'
+      type: 'dividend',
+      property: 'Luxury Downtown Apartment',
+      tokens: 0,
+      value: 0.05,
+      date: '2023-04-01'
     },
     {
       id: 4,
-      name: 'Urban Retail Space',
-      address: '0xefgh...ijkl',
-      date: '2023-03-05',
-      status: 'Active'
-    },
-    {
-      id: 5,
-      name: 'Historic Brownstone',
-      address: '0x2468...1357',
-      date: '2023-02-18',
-      status: 'Active'
+      type: 'purchase',
+      property: 'Urban Retail Space',
+      tokens: 1,
+      value: 0.67,
+      date: '2023-03-10'
     }
   ];
 
-  if (!isConnected || !isAdmin) {
+  if (!isConnected) {
     return (
       <div className="bg-gray-900 min-h-screen w-full flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-8 bg-gray-800 rounded-xl border border-gray-700">
-          <ShieldIcon size={48} className="mx-auto text-indigo-400 mb-4" />
+          <WalletIcon size={48} className="mx-auto text-indigo-400 mb-4" />
           <h2 className="text-2xl font-semibold text-white mb-4">
-            Admin Access Required
+            Wallet Not Connected
           </h2>
           <p className="text-gray-300 mb-6">
-            You need admin privileges to access this dashboard.
+            Please connect your wallet to access your dashboard and portfolio.
           </p>
           <Button onClick={() => navigate('/')}>Back to Home</Button>
         </div>
@@ -92,14 +94,19 @@ export default function Admin() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">
-                Admin Dashboard
+                My Dashboard
               </h1>
-              <p className="text-gray-400">
-                Manage properties, contracts, and platform settings
-              </p>
+              <div className="flex items-center text-gray-400">
+                <span className="bg-gray-800 rounded-full px-3 py-1 text-sm border border-gray-700">
+                  {address?.substring(0, 6)}...
+                  {address?.substring(address.length - 4)}
+                </span>
+              </div>
             </div>
             <div className="mt-4 md:mt-0">
-              <Button icon={<PlusIcon size={16} />}>Add New Property</Button>
+              <Button variant="outline" icon={<LogOutIcon size={16} />} onClick={disconnectWallet}>
+                Disconnect
+              </Button>
             </div>
           </div>
 
@@ -112,10 +119,10 @@ export default function Admin() {
             >
               <div className="flex items-center text-gray-400 mb-2">
                 <BuildingIcon size={16} className="mr-2" />
-                <span>Total Properties</span>
+                <span>Properties Owned</span>
               </div>
               <div className="text-3xl font-bold text-white">
-                {properties.length}
+                {userPortfolio.totalProperties}
               </div>
             </motion.div>
             <motion.div 
@@ -126,10 +133,10 @@ export default function Admin() {
             >
               <div className="flex items-center text-gray-400 mb-2">
                 <CoinsIcon size={16} className="mr-2" />
-                <span>Active Contracts</span>
+                <span>Total Invested</span>
               </div>
               <div className="text-3xl font-bold text-indigo-400">
-                {contractDeployments.length}
+                {userPortfolio.totalInvested} ETH
               </div>
             </motion.div>
             <motion.div 
@@ -139,9 +146,10 @@ export default function Admin() {
               className="bg-gray-800 rounded-xl border border-gray-700 p-6"
             >
               <div className="flex items-center text-gray-400 mb-2">
-                <span>Total Sales</span>
+                <HistoryIcon size={16} className="mr-2" />
+                <span>Last Transaction</span>
               </div>
-              <div className="text-3xl font-bold text-green-400">5.67 ETH</div>
+              <div className="text-xl font-semibold text-white">3 days ago</div>
             </motion.div>
           </div>
 
@@ -165,10 +173,10 @@ export default function Admin() {
               </nav>
             </div>
             <div className="p-6">
-              {activeTab === 'properties' && (
+              {activeTab === 'portfolio' && (
                 <div>
                   <h3 className="text-xl font-semibold text-white mb-6">
-                    Manage Properties
+                    My Properties
                   </h3>
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-700">
@@ -178,13 +186,10 @@ export default function Admin() {
                             Property
                           </th>
                           <th className="px-6 py-3 bg-gray-700 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                            Location
+                            Tokens Owned
                           </th>
                           <th className="px-6 py-3 bg-gray-700 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                            Status
-                          </th>
-                          <th className="px-6 py-3 bg-gray-700 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                            Price
+                            Value
                           </th>
                           <th className="px-6 py-3 bg-gray-700 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
                             Actions
@@ -192,45 +197,30 @@ export default function Admin() {
                         </tr>
                       </thead>
                       <tbody className="bg-gray-800 divide-y divide-gray-700">
-                        {properties.map(property => (
+                        {userPortfolio.properties.map(property => (
                           <motion.tr 
-                            key={property.id} 
+                            key={property.propertyId} 
                             initial={{ opacity: 0 }} 
                             animate={{ opacity: 1 }} 
                             transition={{ duration: 0.3 }}
                           >
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <div className="h-10 w-10 rounded overflow-hidden flex-shrink-0">
-                                  <img src={property.imageUrl} alt={property.title} className="h-full w-full object-cover" />
-                                </div>
-                                <div className="ml-4">
-                                  <div className="font-medium text-white">
-                                    {property.title}
-                                  </div>
-                                </div>
+                              <div className="font-medium text-white">
+                                {property.propertyName}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-gray-300">
-                              {property.location}
+                              {property.tokensOwned}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <Badge color={property.status === 'Available' ? 'green' : property.status === 'Sold Out' ? 'red' : 'yellow'}>
-                                {property.status}
-                              </Badge>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-indigo-400">
-                              {property.tokenPrice} ETH
+                              <div className="text-indigo-400">
+                                {property.investmentValue} ETH
+                              </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right">
-                              <div className="flex justify-end space-x-2">
-                                <Button variant="outline" size="sm" icon={<EditIcon size={14} />}>
-                                  Edit
-                                </Button>
-                                <Button variant="danger" size="sm" icon={<TrashIcon size={14} />}>
-                                  Delete
-                                </Button>
-                              </div>
+                              <Button variant="outline" size="sm" onClick={() => navigate(`/property/${property.propertyId}`)}>
+                                View
+                              </Button>
                             </td>
                           </motion.tr>
                         ))}
@@ -239,63 +229,112 @@ export default function Admin() {
                   </div>
                 </div>
               )}
-              {activeTab === 'contracts' && (
+              {activeTab === 'transactions' && (
                 <div>
                   <h3 className="text-xl font-semibold text-white mb-6">
-                    Contract Deployments
+                    Transaction History
                   </h3>
                   <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-700">
                       <thead>
                         <tr>
                           <th className="px-6 py-3 bg-gray-700 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                            Date
+                          </th>
+                          <th className="px-6 py-3 bg-gray-700 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                            Type
+                          </th>
+                          <th className="px-6 py-3 bg-gray-700 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                             Property
                           </th>
                           <th className="px-6 py-3 bg-gray-700 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                            Contract Address
-                          </th>
-                          <th className="px-6 py-3 bg-gray-700 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                            Deployment Date
-                          </th>
-                          <th className="px-6 py-3 bg-gray-700 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                            Status
-                          </th>
-                          <th className="px-6 py-3 bg-gray-700 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
-                            Actions
+                            Amount
                           </th>
                         </tr>
                       </thead>
                       <tbody className="bg-gray-800 divide-y divide-gray-700">
-                        {contractDeployments.map(contract => (
+                        {transactions.map(tx => (
                           <motion.tr 
-                            key={contract.id} 
+                            key={tx.id} 
                             initial={{ opacity: 0 }} 
                             animate={{ opacity: 1 }} 
                             transition={{ duration: 0.3 }}
                           >
-                            <td className="px-6 py-4 whitespace-nowrap text-white">
-                              {contract.name}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span className="text-indigo-400 font-mono">
-                                {contract.address}
-                              </span>
-                            </td>
                             <td className="px-6 py-4 whitespace-nowrap text-gray-300">
-                              {contract.date}
+                              {tx.date}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <Badge color="green">{contract.status}</Badge>
+                              <Badge color={tx.type === 'purchase' ? 'blue' : 'green'}>
+                                {tx.type === 'purchase' ? 'Purchase' : 'Dividend'}
+                              </Badge>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right">
-                              <Button variant="outline" size="sm">
-                                View on Etherscan
-                              </Button>
+                            <td className="px-6 py-4 whitespace-nowrap text-white">
+                              {tx.property}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-indigo-400">
+                              {tx.value} ETH{' '}
+                              {tx.tokens > 0 && `(${tx.tokens} tokens)`}
                             </td>
                           </motion.tr>
                         ))}
                       </tbody>
                     </table>
+                  </div>
+                </div>
+              )}
+              {activeTab === 'settings' && (
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-6">
+                    Account Settings
+                  </h3>
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-white font-medium mb-2">
+                        Notification Preferences
+                      </h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center">
+                          <input id="email-notifications" type="checkbox" defaultChecked className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-600 rounded" />
+                          <label htmlFor="email-notifications" className="ml-2 text-gray-300">
+                            Email notifications for new properties
+                          </label>
+                        </div>
+                        <div className="flex items-center">
+                          <input id="dividend-notifications" type="checkbox" defaultChecked className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-600 rounded" />
+                          <label htmlFor="dividend-notifications" className="ml-2 text-gray-300">
+                            Dividend payment notifications
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-medium mb-2">
+                        Connected Wallet
+                      </h4>
+                      <div className="bg-gray-700 p-4 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" className="w-8 h-8 mr-3" />
+                            <div>
+                              <div className="text-white font-medium">
+                                MetaMask
+                              </div>
+                              <div className="text-gray-400 text-sm">
+                                {address}
+                              </div>
+                            </div>
+                          </div>
+                          <Button variant="outline" size="sm" onClick={disconnectWallet}>
+                            Disconnect
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="pt-4">
+                      <Button variant="secondary" fullWidth>
+                        Save Settings
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}

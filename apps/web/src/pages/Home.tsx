@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRightIcon, BuildingIcon, CoinsIcon, ShieldIcon } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { PropertyCard } from '../components/ui/PropertyCard';
-import { properties } from '../utils/mockData';
+import { properties } from '@drei/shared';
 
 export default function Home() {
   // Only get the first 3 properties for featured section
