@@ -94,7 +94,7 @@ export default function Ftue() {
   const handleConnected = () => {
     connectWallet();
     sheetRef.current?.dismiss();
-    router.replace('/(main)/dashboard' as any);
+    router.replace('/(main)/portfolio' as any);
   };
 
   const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {

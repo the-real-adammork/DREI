@@ -1,5 +1,10 @@
 import { Tabs } from 'expo-router';
-import { LayoutDashboard, Compass } from 'lucide-react-native';
+import {
+  Briefcase,
+  History as HistoryIcon,
+  Settings as SettingsIcon,
+  Compass,
+} from 'lucide-react-native';
 
 export default function MainLayout() {
   return (
@@ -13,10 +18,17 @@ export default function MainLayout() {
       }}
     >
       <Tabs.Screen
-        name="dashboard"
+        name="portfolio"
         options={{
-          title: 'Dashboard',
-          tabBarIcon: ({ color, size }) => <LayoutDashboard color={color} size={size} />,
+          title: 'Portfolio',
+          tabBarIcon: ({ color, size }) => <Briefcase color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="transactions"
+        options={{
+          title: 'Transactions',
+          tabBarIcon: ({ color, size }) => <HistoryIcon color={color} size={size} />,
         }}
       />
       <Tabs.Screen
@@ -24,6 +36,13 @@ export default function MainLayout() {
         options={{
           title: 'Browse',
           tabBarIcon: ({ color, size }) => <Compass color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color, size }) => <SettingsIcon color={color} size={size} />,
         }}
       />
       <Tabs.Screen name="property/[id]" options={{ href: null }} />
