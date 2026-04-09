@@ -12,9 +12,8 @@ import {
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Search, Wallet, Coins, TrendingUp } from 'lucide-react-native';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import { useWallet } from '../lib/wallet';
-import { WalletConnectSheet } from '../components/WalletConnectSheet';
+import { WalletConnectSheet, WalletConnectSheetHandle } from '../components/WalletConnectSheet';
 
 const { width } = Dimensions.get('window');
 
@@ -79,10 +78,13 @@ const panels: Panel[] = [
 export default function Ftue() {
   const router = useRouter();
   const { connectWallet } = useWallet();
-  const sheetRef = useRef<BottomSheetModal>(null);
+  const sheetRef = useRef<WalletConnectSheetHandle>(null);
   const [index, setIndex] = useState(0);
 
-  const openSheet = () => sheetRef.current?.present();
+  const openSheet = () => {
+    console.log('[FTUE] openSheet called, ref=', sheetRef.current);
+    sheetRef.current?.present();
+  };
 
   const handleConnected = () => {
     connectWallet();
