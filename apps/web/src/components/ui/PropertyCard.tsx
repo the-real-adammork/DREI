@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPinIcon, CoinsIcon, UsersIcon, TrendingUpIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Property } from '../../utils/types';
+import { Property } from '@drei/shared';
 import { Badge } from './Badge';
 
 type PropertyCardProps = {

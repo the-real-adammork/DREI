@@ -5,7 +5,7 @@ import { WalletIcon, CoinsIcon, HistoryIcon, BuildingIcon, SettingsIcon, LogOutI
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { useWallet } from '../context/WalletContext';
-import { userPortfolio } from '../utils/mockData';
+import { userPortfolio } from '@drei/shared';
 
 export default function User() {
   const { isConnected, address, disconnectWallet } = useWallet();

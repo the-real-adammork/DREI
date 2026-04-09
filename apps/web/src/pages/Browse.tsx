@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FilterIcon, SlidersIcon, SearchIcon } from 'lucide-react';
 import { PropertyCard } from '../components/ui/PropertyCard';
-import { properties } from '../utils/mockData';
+import { properties } from '@drei/shared';
 import { Button } from '../components/ui/Button';
 
 export default function Browse() {

@@ -5,7 +5,7 @@ import { PlusIcon, EditIcon, TrashIcon, ShieldIcon, BuildingIcon, CoinsIcon } fr
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { useWallet } from '../context/WalletContext';
-import { properties } from '../utils/mockData';
+import { properties } from '@drei/shared';
 
 export default function Admin() {
   const { isConnected, isAdmin } = useWallet();

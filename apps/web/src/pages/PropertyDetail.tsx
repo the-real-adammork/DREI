@@ -14,8 +14,8 @@ import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
 import { TransactionModal } from '../components/modals/TransactionModal';
 import { useWallet } from '../context/WalletContext';
-import { Property } from '../utils/types';
-import { properties } from '../utils/mockData';
+import { Property } from '@drei/shared';
+import { properties } from '@drei/shared';
 
 export default function PropertyDetail() {
   const { id } = useParams<{ id: string }>();
