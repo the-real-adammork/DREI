@@ -23,7 +23,7 @@ export function PropertyCard({ property }: { property: Property }) {
 
   return (
     <Pressable
-      onPress={() => router.push(`/(main)/property/${property.id}` as any)}
+      onPress={() => router.push(`/property/${property.id}` as any)}
       className="mb-5 overflow-hidden rounded-2xl bg-gray-800"
     >
       <View>

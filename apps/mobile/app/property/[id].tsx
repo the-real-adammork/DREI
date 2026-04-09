@@ -14,8 +14,8 @@ import {
   Briefcase,
 } from 'lucide-react-native';
 import { properties, userPortfolio } from '@drei/shared';
-import { useWallet } from '../../../lib/wallet';
-import { TransactionSheet, TransactionSheetHandle } from '../../../components/TransactionSheet';
+import { useWallet } from '../../lib/wallet';
+import { TransactionSheet, TransactionSheetHandle } from '../../components/TransactionSheet';
 
 export default function PropertyDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();

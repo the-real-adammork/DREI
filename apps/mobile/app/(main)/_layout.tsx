@@ -45,13 +45,6 @@ export default function MainLayout() {
           tabBarIcon: ({ color, size }) => <SettingsIcon color={color} size={size} />,
         }}
       />
-      <Tabs.Screen
-        name="property/[id]"
-        options={{
-          href: null,
-          tabBarStyle: { display: 'none' },
-        }}
-      />
     </Tabs>
   );
 }
