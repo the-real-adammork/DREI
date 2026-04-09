@@ -32,7 +32,7 @@ export const WalletConnectSheet = forwardRef<WalletConnectSheetHandle, Props>(
             <View className="flex-row items-center">
               <Image
                 source={{
-                  uri: 'https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg',
+                  uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/512px-MetaMask_Fox.svg.png',
                 }}
                 style={{ width: 32, height: 32, marginRight: 12 }}
               />
