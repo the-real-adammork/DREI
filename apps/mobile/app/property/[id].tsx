@@ -49,19 +49,6 @@ export default function PropertyDetail() {
       <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         <View>
           <Image source={{ uri: property.imageUrl }} className="h-72 w-full" resizeMode="cover" />
-          <SafeAreaView edges={['top']} className="absolute inset-x-0 top-0">
-            <View className="flex-row items-center justify-between px-4 pt-2">
-              <Pressable
-                onPress={() => router.back()}
-                className="h-10 w-10 items-center justify-center rounded-full bg-black/50 active:bg-black/70"
-              >
-                <ChevronLeft size={22} color="#fff" />
-              </Pressable>
-              <View className="rounded-full bg-emerald-500/30 px-3 py-1">
-                <Text className="text-xs font-medium text-emerald-300">{property.status}</Text>
-              </View>
-            </View>
-          </SafeAreaView>
         </View>
 
         <View className="px-5 pt-5">
@@ -173,6 +160,20 @@ export default function PropertyDetail() {
 
         </View>
       </ScrollView>
+
+      <SafeAreaView edges={['top']} className="absolute inset-x-0 top-0">
+        <View className="flex-row items-center justify-between px-4 pt-2">
+          <Pressable
+            onPress={() => router.back()}
+            className="h-10 w-10 items-center justify-center rounded-full bg-black/60 active:bg-black/80"
+          >
+            <ChevronLeft size={22} color="#fff" />
+          </Pressable>
+          <View className="rounded-full bg-emerald-500/40 px-3 py-1">
+            <Text className="text-xs font-medium text-emerald-200">{property.status}</Text>
+          </View>
+        </View>
+      </SafeAreaView>
 
       <SafeAreaView edges={['bottom']} className="absolute inset-x-0 bottom-0 bg-gray-900/95">
         <View className="px-5 pt-3">
